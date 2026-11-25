@@ -42,11 +42,16 @@
 映像檔已內建 Node.js、Chromium、正體中文字型（Noto CJK）與所需的 npm 相依套件，預設時區為台北（`Asia/Taipei`），可在無須額外安裝本機環境或無外網的內網環境下直接執行。
 
 ```bash
-# 建置映像檔
+# 直接使用 GitHub Container Registry 預建映像檔（免自行 build，支援 amd64 / arm64）
+mkdir -p ./reports
+docker run --rm --user "$(id -u):$(id -g)" \
+  -v "$(pwd)/reports:/output" \
+  ghcr.io/pcop/wcag22aacheck:latest https://www.google.com/
+
+# 或於本機自行建置映像檔
 docker build -t wcag22-check .
 
-# 執行檢核並將報告輸出至本機 ./reports 目錄
-mkdir -p ./reports
+# 使用本機建置的映像檔執行檢核並輸出至 ./reports 目錄
 docker run --rm --user "$(id -u):$(id -g)" \
   -v "$(pwd)/reports:/output" \
   wcag22-check https://www.google.com/
